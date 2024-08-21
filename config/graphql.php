@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 return [
     'route' => [
@@ -75,14 +75,20 @@ return [
     'schemas' => [
         'default' => [
             'query' => [
-                // ExampleQuery::class,
+                'AllRestaurant' => \App\GraphQL\Queries\AllRestaurant::class,
+                'Foods' => \App\GraphQL\Queries\Foods::class,
+                'SingleRestaurant' => \App\GraphQL\Queries\SingleRestaurant::class,
             ],
             'mutation' => [
-                // ExampleMutation::class,
+                'StoreRating' => \App\GraphQL\Mutations\Rating\StoreRating::class,
+                'Register' => \App\GraphQL\Mutations\Auth\Register::class,
             ],
             // The types only available in this schema
             'types' => [
-                // ExampleType::class,
+                'Restaurant' => \App\GraphQL\Types\Restaurant::class,
+                'Food' => \App\GraphQL\Types\Food::class,
+                'Rating' => \App\GraphQL\Types\Rating::class,
+                'User' => \App\GraphQL\Types\User::class,
             ],
 
             // Laravel HTTP middleware
