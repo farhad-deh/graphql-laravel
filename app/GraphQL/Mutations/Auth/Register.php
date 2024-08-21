@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Mutations\Auth;
 
+use App\Models\User;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
 use Rebing\GraphQL\Support\SelectFields;
 
@@ -19,7 +21,7 @@ class Register extends Mutation
 
     public function type(): Type
     {
-        return Type::listOf(Type::string());
+        return GraphQL::type('Token');
     }
 
     public function args(): array
@@ -59,10 +61,15 @@ class Register extends Mutation
 
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
+        $user = User::create([
+            'name' => $args['name'],
+            'email' => $args['email'],
+            'password' => bcrypt($args['password']),
+        ]);
 
-        return [];
+        return [
+            'user' => $user,
+            'token' => $user->createToken('auth_token')->accessToken,
+        ];
     }
 }

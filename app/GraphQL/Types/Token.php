@@ -8,28 +8,22 @@ use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
-class Rating extends GraphQLType
+class Token extends GraphQLType
 {
     protected $attributes = [
-        'name' => 'Rating',
+        'name' => 'Token',
         'description' => 'A type'
     ];
 
     public function fields(): array
     {
         return [
-            'rate' => [
-                'type' => Type::float()
-            ],
-            'comment' => [
-                'type' => Type::string()
-            ],
             'user' => [
-                'type' => GraphQL::type('User')
+                'type' => GraphQL::type('User'),
             ],
-            'food' => [
-                'type' => GraphQL::type('Food')
-            ],
+            'token' => [
+                'type' => Type::string()
+            ]
         ];
     }
 }

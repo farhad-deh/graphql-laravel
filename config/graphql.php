@@ -80,15 +80,12 @@ return [
                 'SingleRestaurant' => \App\GraphQL\Queries\SingleRestaurant::class,
             ],
             'mutation' => [
-                'StoreRating' => \App\GraphQL\Mutations\Rating\StoreRating::class,
                 'Register' => \App\GraphQL\Mutations\Auth\Register::class,
+                'Login' => \App\GraphQL\Mutations\Auth\Login::class,
             ],
             // The types only available in this schema
             'types' => [
-                'Restaurant' => \App\GraphQL\Types\Restaurant::class,
-                'Food' => \App\GraphQL\Types\Food::class,
-                'Rating' => \App\GraphQL\Types\Rating::class,
-                'User' => \App\GraphQL\Types\User::class,
+                'Token' => \App\GraphQL\Types\Token::class,
             ],
 
             // Laravel HTTP middleware
@@ -99,6 +96,16 @@ return [
 
             // An array of middlewares, overrides the global ones
             'execution_middleware' => null,
+        ],
+        'rating' => [
+            'query' => [
+                // Define any query fields you need for the "rating" schema
+            ],
+            'mutation' => [
+                'StoreRating' => \App\GraphQL\Mutations\Rating\StoreRating::class, // Register the mutation
+            ],
+
+            'middleware' => ['auth:api'],
         ],
     ],
 
@@ -112,6 +119,10 @@ return [
     // ]
     //
     'types' => [
+        'Rating' => \App\GraphQL\Types\Rating::class,
+        'Restaurant' => \App\GraphQL\Types\Restaurant::class,
+        'Food' => \App\GraphQL\Types\Food::class,
+        'User' => \App\GraphQL\Types\User::class,
         // ExampleType::class,
         // ExampleRelationType::class,
         // \Rebing\GraphQL\Support\UploadType::class,

@@ -21,7 +21,7 @@ class RatingFactory extends Factory
         return [
             'user_id' => User::factory(),
             'food_id' => Food::factory(),
-            'rating' => fake()->randomFloat(1, 1, 5),
+            'rate' => fake()->randomFloat(1, 1, 5),
         ];
     }
 }

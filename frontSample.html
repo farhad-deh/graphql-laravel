@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Document</title>
+    <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css"
+    />
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <form action="#" id="form" class="mt-5 col">
+            <div class="form-group">
+                <label for="food_id">food_id</label>
+                <input
+                    type="number"
+                    id="food_id"
+                    name="food_id"
+                    class="form-control"
+                />
+            </div>
+            <div class="form-group">
+                <label for="rate">rating :</label>
+                <input
+                    type="text"
+                    id="rate"
+                    name="rate"
+                    class="form-control"
+                />
+            </div>
+
+            <button type="submit" class="btn btn-danger">Send</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let token =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiODJiY2U3MzhiZGM1YjcwMTI4NTZhNjViMTRlMTY0MzZiZmYzYTRiMTViYjYyOWVhNWU3NGZkNmQzMzY4YWNhNWZiMjM0NDVlYjFlYTI2YTIiLCJpYXQiOjE3MjQyNDgzODUuNzYxMjA5LCJuYmYiOjE3MjQyNDgzODUuNzYxMjEsImV4cCI6MTc1NTc4NDM4NS43NjAxNTIsInN1YiI6IjkiLCJzY29wZXMiOltdfQ.YNruLYqexiuheAYHpoHrooGo1mJqv0sa68JdLEskBEJVcrXtYUMRBGp6prsG9jHXhVKcRvtnZXZEjvmZ_njmJgtLxDI7NaF3AjyDbXl6ViQiWLWWgrnVBfKoeyWGzWt-B5JHKOuc-fwfbBlqZORh1axGOgKeO7zELOShkb7DmgRrXdjUX-_24QO8GLGBoGURYKkXQECfdCCiZlfe15FVUTiDRL1KFC7A9SXWsihMhL7zwXpX7bYXuXcty6oQUCeVtgvMk47STFt_1z0WHeqAOCuFDrDrlKofbHJttOOIt95872t-OSU_kxqbZUh9_92Yp6E3Gt0pzuC3-4Y24z_pLIlOE66HU3nhgLCZEd0Ue9d7u6T3-VtJNFOEZgKI9i7LMG9vGzvs5TzX_AdtlQojPluqVocdhHZneK_GvLyN0YccXOlCOSn7tsAZg7WOtjARtKI-NAxGrTkg7QgNeeB6sxYLrfWA8XZE-R_-OjRPzaVfMQTz7EgpOCv8_gjQ6zOoQB37mMC70182l1jAt--48C_fVdbYPnirtjFkIdb6aXP_bF3xBlxP6ifW5WbXLxhJiiMGQRvzTyPMAn8_ZRzImw1WpbMKSkIkN4yo_Lrrhc7A24LMetJJFIekU-z27M1EkEQlY-l2TOYIUvNhphNR7QsFCH8yqMSpid-g16QYWsI";
+
+    document.getElementById("form").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let data = {
+            query: `
+                        mutation addNewRating($food_id: Int!, $rate: Float!, $comment: String) {
+  StoreRating (food_id: $food_id, rate: $rate, comment: $comment) {
+    rate
+     user {
+      name
+      email
+    }
+    food {
+      name
+      restaurant {
+        name
+        average_rating
+      }
+    }
+    }
+}
+                    `,
+            variables: {
+                food_id: parseInt(document.getElementById("food_id").value, 10),
+                rate: parseFloat(document.getElementById("rate").value),
+            },
+        };
+
+        fetch("http://localhost:8000/graphql/rating", {
+            method: "POST",
+            headers: {
+                accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify(data),
+        })
+            .then((res) => res.json())
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
+    });
+</script>
+</body>
+</html>

@@ -31,7 +31,7 @@ class Restaurant extends Model
             ->with('ratings')
             ->get()
             ->flatMap(function ($food) {
-                return $food->ratings->pluck('rating');
+                return $food->ratings->pluck('rate');
             })->avg();
         $this->average_rating = $avg;
         $this->save();

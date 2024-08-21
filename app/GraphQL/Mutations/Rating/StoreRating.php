@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Mutations\Rating;
 
-use App\Models\Food;
 use App\Models\Rating;
 use Closure;
 use GraphQL\Error\Error;
@@ -12,13 +11,12 @@ use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
-use Rebing\GraphQL\Support\SelectFields;
 
 class StoreRating extends Mutation
 {
     protected $attributes = [
-        'name' => 'rating/StoreRating',
-        'description' => 'A mutation'
+        'name' => 'StoreRating',
+        'description' => 'A mutation to store a rating'
     ];
 
     public function type(): Type
@@ -32,7 +30,7 @@ class StoreRating extends Mutation
             'food_id' => [
                 'type' => Type::int()
             ],
-            'rating' => [
+            'rate' => [
                 'type' => Type::float()
             ],
             'comment' => [
@@ -45,7 +43,7 @@ class StoreRating extends Mutation
     {
         return [
             'food_id' => 'required|exists:foods,id',
-            'rating' => 'required|numeric|min:1|max:5',
+            'rate' => 'required|numeric|min:1|max:5',
         ];
     }
 
@@ -53,16 +51,15 @@ class StoreRating extends Mutation
     {
         try {
             $rating = Rating::updateOrCreate([
-                'user_id' => 2,
+                'user_id' => auth()->id(),
                 'food_id' => $args['food_id'],
             ], [
-                'rating' => $args['rating'],
-                'comment' => $args['comment'],
+                'rate' => $args['rate'],
+                'comment' => $args['comment'] ?? null,
             ]);
-            Food::whereId($args['food_id'])->first()->restaurant->averageRating();
+            $rating->food()->first()->restaurant->averageRating();
             return $rating;
         } catch (\Exception $exception) {
-            logger($exception);
             return new Error('There was an error while trying to create rating.');
         }
 

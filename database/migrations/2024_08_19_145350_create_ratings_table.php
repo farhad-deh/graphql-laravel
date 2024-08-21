@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('food_id');
             $table->foreign('food_id')->references('id')->on('foods')->onDelete('cascade');
 
-            $table->float('rating');
+            $table->float('rate');
             $table->text('comment')->nullable();
 
             $table->unique(['user_id', 'food_id']);
